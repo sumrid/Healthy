@@ -11,4 +11,6 @@
     <string name="height">Height (m)</string>
     <string name="weight">Weight (kg)</string>
     <string name="calculate">Calculate</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
 </resources>

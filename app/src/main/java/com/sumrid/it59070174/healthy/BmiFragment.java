@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BmiFragment extends Fragment {
     @Nullable
@@ -31,11 +32,32 @@ public class BmiFragment extends Fragment {
                 EditText _bmiWeight = getView().findViewById(R.id.bmi_weight);
                 TextView _bmi = getView().findViewById(R.id.bmi_result);
 
-                float bmiHeight = Float.parseFloat(_bmiHeight.getText().toString());
-                float bmiWeight = Float.parseFloat(_bmiWeight.getText().toString());
-                float BMI = bmiWeight/(bmiHeight*bmiHeight);
+                if(_bmiHeight.getText().toString().isEmpty() || _bmiWeight.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(),"Please fill Height or Weight.",Toast.LENGTH_SHORT).show();
+                } else {
+                    float bmiHeight = Float.parseFloat(_bmiHeight.getText().toString());
+                    float bmiWeight = Float.parseFloat(_bmiWeight.getText().toString());
+                    float BMI = bmiWeight/(bmiHeight*bmiHeight);
+                    _bmi.setText(String.format("%.2f", BMI));
+                }
 
-                _bmi.setText(String.format("%.2f", BMI));
+            }
+        });
+
+        onClickBackBtn();
+    }
+
+    private void onClickBackBtn(){
+
+        Button backBtn = getView().findViewById(R.id.bmi_back);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction().replace(R.id.main_view, new MenuFragment())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

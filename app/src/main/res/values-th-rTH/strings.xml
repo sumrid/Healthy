@@ -6,4 +6,10 @@
     <string name="userId">ชื่อผู้ใช้</string>
     <string name="age">อายุ</string>
     <string name="username">ชื่อ</string>
+    <string name="register">ลงทะเบียนบัญชีใหม่</string>
+    <string name="height">ความสูง (เมตร)</string>
+    <string name="weight">น้ำหนัก (กิโลกรัม)</string>
+    <string name="calculate">คำนวณ BMI</string>
+    <string name="back">กลับ</string>
+    <string name="save">บันทึก</string>
 </resources>

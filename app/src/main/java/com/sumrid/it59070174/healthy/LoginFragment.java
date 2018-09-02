@@ -42,10 +42,10 @@ public class LoginFragment extends Fragment {
                 if(_userIdStr.isEmpty() || _passwordStr.isEmpty()){
                     Toast.makeText(getActivity(),"Please fill userID or password.",Toast.LENGTH_SHORT).show();
                 } else if (_userIdStr.equals("admin") && _userIdStr.equals("admin")){
-                    Log.d("USER", "GOTO BMI");
+                    Log.d("USER", "GOTO MENU");
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.main_view, new BmiFragment())
+                            .replace(R.id.main_view, new MenuFragment())
                             .addToBackStack(null)
                             .commit();
                 } else {

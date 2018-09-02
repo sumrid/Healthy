@@ -43,7 +43,7 @@
                 android:layout_marginTop="87dp"
                 android:drawableLeft="@drawable/ic_user_name"
                 android:ems="10"
-                android:hint="@string/userId"
+                android:hint="User Name"
                 android:inputType="textPersonName"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
