@@ -1,25 +1,25 @@
 package com.sumrid.it59070174.healthy.weight;
 
 public class Weight {
-    private String data;
+    private String date;
     private float weight;
     private String status;
 
     public Weight(){
     }
 
-    public Weight(String data, float weight, String status) {
-        this.data = data;
+    public Weight(String date, float weight, String status) {
+        this.date = date;
         this.weight = weight;
         this.status = status;
     }
 
-    public String getData() {
-        return data;
+    public String getDate() {
+        return date;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public float getWeight() {

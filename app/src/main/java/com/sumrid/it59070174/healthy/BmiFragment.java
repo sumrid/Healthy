@@ -37,6 +37,7 @@ public class BmiFragment extends Fragment {
                 } else {
                     float bmiHeight = Float.parseFloat(_bmiHeight.getText().toString());
                     float bmiWeight = Float.parseFloat(_bmiWeight.getText().toString());
+                    bmiHeight = bmiHeight/100;
                     float BMI = bmiWeight/(bmiHeight*bmiHeight);
                     _bmi.setText(String.format("%.2f", BMI));
                 }

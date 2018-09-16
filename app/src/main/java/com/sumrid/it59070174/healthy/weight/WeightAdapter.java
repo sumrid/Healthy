@@ -37,8 +37,8 @@ public class WeightAdapter extends ArrayAdapter<Weight> {
         TextView weight = weightItem.findViewById(R.id.weight_item_weight);
 
         Weight row = weights.get(position);
-        date.setText(row.getData());
-        weight.setText("" + row.getWeight());
+        date.setText(row.getDate());
+        weight.setText(row.getWeight()+" kg");
 
         return weightItem;
     }

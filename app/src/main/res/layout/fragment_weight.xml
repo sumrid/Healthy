@@ -23,8 +23,5 @@
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </ListView>
-
+        app:layout_constraintTop_toTopOf="parent"></ListView>
 </android.support.constraint.ConstraintLayout>

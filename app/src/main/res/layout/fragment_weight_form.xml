@@ -63,6 +63,7 @@
         android:ems="10"
         android:hint="@string/weight"
         android:inputType="numberDecimal"
+        android:drawableLeft="@drawable/ic_weight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"

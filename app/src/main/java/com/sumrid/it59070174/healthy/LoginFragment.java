@@ -34,6 +34,7 @@ public class LoginFragment extends Fragment {
 
         initLoginBtn();
         initRegisterBtn();
+        checkCurrentUser();
     }
 
     void initLoginBtn() {
@@ -48,7 +49,7 @@ public class LoginFragment extends Fragment {
                 String _passwordStr = _password.getText().toString();
 
                 if (_userIdStr.isEmpty() || _passwordStr.isEmpty()) {
-                    Toast.makeText(getActivity(), "Please fill userID or password.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please fill E-mail or password.", Toast.LENGTH_SHORT).show();
                 } else {
                     signIn(_userIdStr, _passwordStr);
                 }
@@ -80,12 +81,9 @@ public class LoginFragment extends Fragment {
         }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                Toast.makeText(getActivity(), "Sign in success", Toast.LENGTH_SHORT).show();
-                goToMenu();
+                checkVerified();
             }
         });
-        if (firebaseAuth.getCurrentUser() != null) {
-        }
     }
 
     void goToMenu() {
@@ -95,5 +93,22 @@ public class LoginFragment extends Fragment {
                 .replace(R.id.main_view, new MenuFragment())
                 .addToBackStack(null)
                 .commit();
+    }
+
+    void checkVerified() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+            goToMenu();
+        } else {
+            firebaseAuth.signOut();
+            Toast.makeText(getActivity(), "Please verify your email", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    void checkCurrentUser(){
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() != null) {
+            goToMenu();
+        }
     }
 }

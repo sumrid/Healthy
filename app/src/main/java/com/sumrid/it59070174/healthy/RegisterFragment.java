@@ -1,5 +1,7 @@
 package com.sumrid.it59070174.healthy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sumrid.it59070174.healthy.weight.WeightFormFragment;
+
+import java.util.Objects;
 
 
 public class RegisterFragment extends Fragment {
@@ -29,26 +35,13 @@ public class RegisterFragment extends Fragment {
 
     }
 
-
-    void ver_btn(){
-        Button verBtn = getView().findViewById(R.id.chkver_btn);
-        verBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                FirebaseAuth curUser = FirebaseAuth.getInstance();
-//                curUser.signOut();
-                if(FirebaseAuth.getInstance().getCurrentUser()!=null) Log.d("LOGIN", "YES");
-                else Log.d("LOGIN", "NO");
-            }
-        });
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initRegisterBtn();
+    }
 
-        ver_btn();
-
+    void initRegisterBtn(){
         Button registerBtn = getView().findViewById(R.id.register_register_btn);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,32 +58,22 @@ public class RegisterFragment extends Fragment {
                 if (userIdStr.isEmpty() || re_passwordStr.isEmpty() || passwordStr.isEmpty()){
                     Toast.makeText(getActivity(), "กรุณาระบุข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();
                 }
-                else if (passwordStr.equals(re_passwordStr) && passwordStr.length() > 6) {
+                else if (passwordStr.equals(re_passwordStr) && passwordStr.length() >= 6) {
+                    loading(true);
                     createAccount(userIdStr,passwordStr);
-                } else{
-                    Toast.makeText(getActivity(), "Password Invalid", Toast.LENGTH_SHORT).show();
+                } else if (!passwordStr.equals(re_passwordStr)) {
+                    Toast.makeText(getActivity(), "Password not match", Toast.LENGTH_SHORT).show();
+                    String error = getString(R.string.password_not_match);
+                    _RePassword.setError(error);
+                } else {
+                    Toast.makeText(getActivity(), "Password length should be greater than 5", Toast.LENGTH_SHORT).show();
                 }
 
-//                if (userIdStr.isEmpty() || re_passwordStr.isEmpty() || passwordStr.isEmpty()) {
-//                    Toast.makeText(getActivity(), "กรุณาระบุข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();
-//                } else if (userIdStr.equals("admin")) {
-//                    Toast.makeText(getActivity(), "ชื่อผู้ใช้ไม่สามารถใช้ได้", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Log.d("USER", "GOTO BMI");
-//                    getActivity().getSupportFragmentManager()
-//                            .beginTransaction()
-//                            .replace(R.id.main_view, new BmiFragment())
-//                            .addToBackStack(null)
-//                            .commit();
-//                }
             }
         });
-
     }
 
-
     void createAccount(String user, String password) {
-
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(user, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
@@ -98,26 +81,71 @@ public class RegisterFragment extends Fragment {
                 Log.d("Register", ""+authResult);
                 FirebaseUser curUser = FirebaseAuth.getInstance().getCurrentUser();
                 sendVerifiedEmail(curUser);
-                ver_btn();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                loading(false);
                 Log.d("Register", "Fail : "+e);
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    void sendVerifiedEmail(FirebaseUser _user) {
+    void sendVerifiedEmail(final FirebaseUser _user) {
         _user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener < Void > () {
             @Override public void onSuccess(Void aVoid) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.signOut();
                 Toast.makeText(getActivity(), "Send Verified Email", Toast.LENGTH_SHORT).show();
+                goToLoginFragment();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override public void onFailure(@NonNull Exception e) {
+                loading(false);
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    void loading(boolean isLoad){
+        ProgressBar loading = getView().findViewById(R.id.register_loading);
+        Button registerBtn = getView().findViewById(R.id.register_register_btn);
+        if(isLoad) {
+            loading.setVisibility(View.VISIBLE);
+            registerBtn.setVisibility(View.GONE);
+        } else {
+            loading.setVisibility(View.GONE);
+            registerBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void showDialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Verify your email");
+        alertDialog.setMessage("Please check your email.");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        goToLoginFragment();
+                    }
+                });
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                dialog.dismiss();
+                goToLoginFragment();
+            }
+        });
+        alertDialog.show();
+    }
+
+    void goToLoginFragment(){
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_view, new LoginFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }
