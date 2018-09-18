@@ -49,16 +49,15 @@ public class BmiFragment extends Fragment {
     }
 
     private void onClickBackBtn(){
-
         Button backBtn = getView().findViewById(R.id.bmi_back);
-
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction().replace(R.id.main_view, new MenuFragment())
-                        .addToBackStack(null)
-                        .commit();
+                getFragmentManager().popBackStack();
+//                getActivity().getSupportFragmentManager()
+//                        .beginTransaction().replace(R.id.main_view, new MenuFragment())
+//                        .addToBackStack(null)
+//                        .commit();
             }
         });
     }

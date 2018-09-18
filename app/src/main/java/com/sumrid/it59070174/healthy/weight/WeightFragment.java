@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sumrid.it59070174.healthy.R;
@@ -36,7 +37,9 @@ public class WeightFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth auth = FirebaseAuth.getInstance();
     ArrayList<Weight> weights = new ArrayList<>();
+    WeightAdapter weightAdapter;
     ListView weightList;
+    WeightFormFragment weightFormFragment = new WeightFormFragment();
 
     @Nullable
     @Override
@@ -51,6 +54,9 @@ public class WeightFragment extends Fragment {
         getData();
         initAddBtn();
         weightList = getView().findViewById(R.id.weight_list);
+        weightAdapter = new WeightAdapter(getActivity(),
+                R.layout.fragment_weight_item, weights);
+        weightList.setAdapter(weightAdapter);
         weights.clear();
     }
 
@@ -63,7 +69,8 @@ public class WeightFragment extends Fragment {
                 getActivity()
                         .getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.main_view, new WeightFormFragment())
+                        .replace(R.id.main_view, weightFormFragment)
+//                        .replace(R.id.main_view, new WeightFormFragment())
                         .addToBackStack(null)
                         .commit();
             }
@@ -71,32 +78,9 @@ public class WeightFragment extends Fragment {
     }
 
     void getData(){
-//        db.collection("test")
-//                .document("testUser")
-//                .collection("weight")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Weight obj = document.toObject(Weight.class);
-//                                weights.add(obj);
-//                            }
-//                            disableProcessBar();
-//                            ListView weightList = getView().findViewById(R.id.weight_list);
-//                            WeightAdapter weightAdapter = new WeightAdapter(getActivity(),
-//                                    R.layout.fragment_weight_item, weights);
-//                            weightList.setAdapter(weightAdapter);
-//                        } else {
-//                            Log.d("Data", "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
-
         db.collection("myfitness")
                 .document(auth.getUid())
-                .collection("weight")
+                .collection("weight").orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -104,10 +88,11 @@ public class WeightFragment extends Fragment {
                             Weight obj = document.toObject(Weight.class);
                             weights.add(obj);
                         }
+                        weightAdapter.notifyDataSetChanged();
 
-                        WeightAdapter weightAdapter = new WeightAdapter(getActivity(),
-                                R.layout.fragment_weight_item, weights);
-                        weightList.setAdapter(weightAdapter);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("weight", weights);
+                        weightFormFragment.setArguments(bundle);
                     }
                 });
     }

@@ -62,11 +62,12 @@ public class MenuFragment extends Fragment{
                 } else {
                     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                     firebaseAuth.signOut();
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.main_view, new LoginFragment())
-                            .addToBackStack(null)
-                            .commit();
+                    getFragmentManager().popBackStack();
+//                    getActivity().getSupportFragmentManager()
+//                            .beginTransaction()
+//                            .replace(R.id.main_view, new LoginFragment())
+//                            .addToBackStack(null)
+//                            .commit();
                 }
 
             }
@@ -74,6 +75,6 @@ public class MenuFragment extends Fragment{
 
         TextView eMail = getView().findViewById(R.id.menu_username);
         FirebaseAuth user = FirebaseAuth.getInstance();
-        eMail.setText(user.getCurrentUser().getEmail());
+        if(user.getCurrentUser() != null) eMail.setText(user.getCurrentUser().getEmail());
     }
 }
