@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,7 @@ public class WeightAdapter extends ArrayAdapter<Weight> {
         TextView status = weightItem.findViewById(R.id.weight_item_status);
 
         Weight row = weights.get(position);
-        date.setText(row.getDate());
+        date.setText(row.getDateStr());
         weight.setText(row.getWeight()+" kg");
         status.setText(row.getStatus());
 

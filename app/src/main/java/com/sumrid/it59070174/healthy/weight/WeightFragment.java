@@ -54,10 +54,9 @@ public class WeightFragment extends Fragment {
         getData();
         initAddBtn();
         weightList = getView().findViewById(R.id.weight_list);
-        weightAdapter = new WeightAdapter(getActivity(),
-                R.layout.fragment_weight_item, weights);
+        weightAdapter = new WeightAdapter(getActivity(), R.layout.fragment_weight_item, weights);
         weightList.setAdapter(weightAdapter);
-        weights.clear();
+
     }
 
     void initAddBtn(){
@@ -84,6 +83,7 @@ public class WeightFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        weights.clear();
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             Weight obj = document.toObject(Weight.class);
                             weights.add(obj);

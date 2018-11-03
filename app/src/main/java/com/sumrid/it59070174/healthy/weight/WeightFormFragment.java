@@ -1,29 +1,24 @@
 package com.sumrid.it59070174.healthy.weight;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sumrid.it59070174.healthy.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class WeightFormFragment extends Fragment {
@@ -77,7 +72,7 @@ public class WeightFormFragment extends Fragment {
         ArrayList<Weight> weights = (ArrayList<Weight>) getArguments().getSerializable("weight");
         if(!weights.isEmpty()){
             Weight previousWeight = weights.get(0);
-            if(weight.getDate().compareTo(previousWeight.getDate()) > 0) {
+            if(weight.getDateStr().compareTo(previousWeight.getDateStr()) > 0) {
                 if (weight.getWeight() > previousWeight.getWeight()) weight.setStatus("UP");
                 else if (weight.getWeight() < previousWeight.getWeight()) weight.setStatus("DOWN");
             } else {
@@ -90,7 +85,7 @@ public class WeightFormFragment extends Fragment {
         db.collection("myfitness")
                 .document(auth.getUid())
                 .collection("weight")
-                .document(weight.getDate()).set(weight)
+                .document(weight.getDateStr()).set(weight)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -106,17 +101,14 @@ public class WeightFormFragment extends Fragment {
 
     void goToWeightFragment(){
         getFragmentManager().popBackStack();
-//        getActivity().getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.main_view, new WeightFragment())
-//                .addToBackStack(null)
-//                .commit();
     }
 
     void initOnSetDate(){
         EditText _date = getView().findViewById(R.id.weightForm_date);
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String currentDate = sdf.format(new Date());
+        
         _date.setText(currentDate);
     }
 }

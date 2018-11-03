@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +26,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
+
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,9 +40,14 @@ public class LoginFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ImageView _appLogo = getActivity().findViewById(R.id.logo);
+        Animation fade = new AlphaAnimation(0,1);
+        fade.setDuration(2000);
+        _appLogo.setAnimation(fade);
+
         initLoginBtn();
         initRegisterBtn();
-        checkCurrentUser();
+        checkCurrentUser(firebaseAuth);
     }
 
     void initLoginBtn() {
@@ -51,6 +64,7 @@ public class LoginFragment extends Fragment {
                 if (_userIdStr.isEmpty() || _passwordStr.isEmpty()) {
                     Toast.makeText(getActivity(), "Please fill E-mail or password.", Toast.LENGTH_SHORT).show();
                 } else {
+                    setLoading(true);
                     signIn(_userIdStr, _passwordStr);
                 }
             }
@@ -72,16 +86,16 @@ public class LoginFragment extends Fragment {
     }
 
     void signIn(String email, String password) {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                setLoading(false);
                 Toast.makeText(getActivity(), "Sign in fail : " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                checkVerified();
+                checkVerified(firebaseAuth);
             }
         });
     }
@@ -91,24 +105,34 @@ public class LoginFragment extends Fragment {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_view, new MenuFragment())
-                .addToBackStack(null)
                 .commit();
     }
 
-    void checkVerified() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    void checkVerified(FirebaseAuth firebaseAuth) {
         if (firebaseAuth.getCurrentUser().isEmailVerified()) {
             goToMenu();
         } else {
             firebaseAuth.signOut();
+            setLoading(false);
             Toast.makeText(getActivity(), "Please verify your email", Toast.LENGTH_SHORT).show();
         }
     }
 
-    void checkCurrentUser(){
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    void checkCurrentUser(FirebaseAuth firebaseAuth){
         if(firebaseAuth.getCurrentUser() != null) {
             goToMenu();
+        }
+    }
+
+    private void setLoading(boolean setToLoading){
+        ProgressBar _loading = getView().findViewById(R.id.login_loading);
+        Button loginButton = getView().findViewById(R.id.login_btn);
+        if(setToLoading){
+            _loading.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.GONE);
+        } else {
+            _loading.setVisibility(View.GONE);
+            loginButton.setVisibility(View.VISIBLE);
         }
     }
 }

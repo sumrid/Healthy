@@ -142,10 +142,11 @@ public class RegisterFragment extends Fragment {
     }
 
     void goToLoginFragment(){
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_view, new LoginFragment())
-                .addToBackStack(null)
-                .commit();
+        getFragmentManager().popBackStack();
+//        getActivity().getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.main_view, new LoginFragment())
+//                .addToBackStack(null)
+//                .commit();
     }
 }

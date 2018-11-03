@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:padding="5dp"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
