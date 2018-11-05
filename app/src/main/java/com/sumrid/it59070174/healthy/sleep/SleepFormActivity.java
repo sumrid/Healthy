@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.sumrid.it59070174.healthy.R;
 import com.sumrid.it59070174.healthy.dbhelper.DBHelper;
@@ -65,8 +66,10 @@ public class SleepFormActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (haveExtra) {
                     updateData();
+                    showToast("Updated");
                 } else {
                     saveData();
+                    showToast("Saved");
                 }
                 finish();
             }
@@ -177,5 +180,9 @@ public class SleepFormActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showToast(String text){
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }
