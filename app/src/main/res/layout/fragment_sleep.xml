@@ -18,7 +18,7 @@
         android:id="@+id/sleep_form_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Sleep" />
+        android:text="@string/add_sleep_time" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/sleep_time_list"

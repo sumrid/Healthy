@@ -16,4 +16,11 @@
     <string name="date">Date</string>
     <string name="bedtime">Bedtime</string>
     <string name="wakingtime">Waking time</string>
+    <string name="add_sleep_time">Add Sleep Time</string>
+
+    <!-- weight fragment -->
+    <string name="add_weight">Add Weight</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 </resources>

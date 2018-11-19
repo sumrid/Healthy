@@ -64,14 +64,18 @@ public class SleepFormActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (haveExtra) {
-                    updateData();
-                    showToast("Updated");
+                if(bedTime.getText().toString().isEmpty() || wakingTime.getText().toString().isEmpty()) {
+                    showToast("กรอกข้อมูลให้ครบ");
                 } else {
-                    saveData();
-                    showToast("Saved");
+                    if (haveExtra) {
+                        updateData();
+                        showToast("Updated");
+                    } else {
+                        saveData();
+                        showToast("Saved");
+                    }
+                    finish();
                 }
-                finish();
             }
         });
 

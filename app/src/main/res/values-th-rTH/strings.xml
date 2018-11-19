@@ -14,4 +14,6 @@
     <string name="date">วันที่</string>
     <string name="bedtime">เวลาเข้านอน</string>
     <string name="wakingtime">เวลาตื่น</string>
+    <string name="add_weight">เพิ่มข้อมูลน้ำหนัก</string>
+    <string name="add_sleep_time">เพิ่มเวลานอน</string>
 </resources>

@@ -51,6 +51,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="32dp"
                 android:text="@string/calculate"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/backButtonTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bmi_weight" />
@@ -87,10 +89,12 @@
 
             <Button
                 android:id="@+id/bmi_back"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="@string/back"
+                android:drawableLeft="@drawable/ic_arrow_2"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/backButtonTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
